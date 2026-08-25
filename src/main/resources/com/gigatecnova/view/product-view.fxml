@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Button?>
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.gigatecnova.controller.ProductController"
@@ -13,6 +14,10 @@
 
     <Label text="Nuestros Productos"
            style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #C94F3D;"/>
+
+    <Button text="Nuevo producto"
+            onAction="#handleNewProduct"
+            prefWidth="140"/>
 
     <TableView fx:id="productTable"
                VBox.vgrow="ALWAYS"

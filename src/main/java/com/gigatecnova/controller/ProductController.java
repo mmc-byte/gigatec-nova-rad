@@ -2,12 +2,20 @@ package com.gigatecnova.controller;
 
 import com.gigatecnova.model.Product;
 import com.gigatecnova.service.ProductService;
+import com.gigatecnova.controller.ProductFormController;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 
 import java.sql.SQLException;
 
@@ -36,6 +44,34 @@ public class ProductController {
 
     @FXML
     private TableColumn<Product, Integer> stockColumn;
+
+    /* Botón de nuevo producto----*/
+    @FXML
+    private void handleNewProduct() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/gigatecnova/view/product-form.fxml")
+            );
+
+            Parent root = loader.load();
+            ProductFormController formController = loader.getController();
+            formController.setProductController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Nuevo producto");
+            stage.setScene(new Scene(root, 500, 550));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*--------*/
+
 
     private final ProductService productService = new ProductService();
 
@@ -87,5 +123,10 @@ public class ProductController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /*actualización automática*/
+    public void refreshProducts() {
+        loadProducts();
     }
 }

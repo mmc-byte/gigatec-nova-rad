@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gigatecnova.controller.ProductFormController"
+      spacing="15"
+      style="-fx-padding: 25; -fx-background-color:  #FFF7F5;">
+
+    <Label text="Nuevo producto"
+           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #C94F3D;"/>
+
+    <GridPane hgap="10" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints minWidth="100"/>
+            <ColumnConstraints prefWidth="300"/>
+        </columnConstraints>
+
+        <Label text="Nombre:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="0"/>
+
+        <TextField fx:id="nameField"
+                   promptText="Nombre del producto"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="0"/>
+
+
+        <Label text="SKU:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="1"/>
+
+        <TextField fx:id="skuField"
+                   promptText="SKU"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+
+        <Label text="Descripción:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="2"/>
+
+        <TextArea fx:id="descriptionField"
+                  promptText="Descripción del producto"
+                  prefRowCount="4"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="2"/>
+
+
+        <Label text="Marca:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="3"/>
+
+        <ComboBox fx:id="brandComboBox"
+                  prefWidth="250"
+                  promptText="Seleccionar marca"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="3"/>
+
+
+        <Label text="Categoría:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="4"/>
+
+        <ComboBox fx:id="categoryComboBox"
+                  prefWidth="250"
+                  promptText="Seleccionar categoría"
+                  GridPane.columnIndex="1"
+                  GridPane.rowIndex="4"/>
+
+
+        <Label text="Precio:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="5"/>
+
+        <TextField fx:id="priceField"
+                   promptText="0.00"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="5"/>
+
+
+        <Label text="Stock:"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="6"/>
+
+        <TextField fx:id="stockField"
+                   promptText="0"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="6"/>
+
+    </GridPane>
+
+    <Button text="Guardar"
+            onAction="#handleSave"
+            prefWidth="120"/>
+
+</VBox>

@@ -85,6 +85,83 @@ public class ProductDAO {
         return null;
     }
 
+    public void create(Product product) throws SQLException {
+
+        String productSql = """
+            INSERT INTO products (
+                category_id,
+                brand_id,
+                name,
+                description,
+                sku,
+                price
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+        String inventorySql = """
+            INSERT INTO inventory (
+                product_id,
+                quantity
+            )
+            VALUES (?, ?)
+            """;
+
+        try (Connection connection = DatabaseConfig.getConnection()) {
+
+            try {
+                connection.setAutoCommit(false);
+
+                long productId;
+
+                try (PreparedStatement productStatement =
+                             connection.prepareStatement(
+                                     productSql,
+                                     java.sql.Statement.RETURN_GENERATED_KEYS
+                             )) {
+
+                    productStatement.setLong(1, product.getCategoryId());
+                    productStatement.setLong(2, product.getBrandId());
+                    productStatement.setString(3, product.getName());
+                    productStatement.setString(4, product.getDescription());
+                    productStatement.setString(5, product.getSku());
+                    productStatement.setBigDecimal(6, product.getPrice());
+
+                    productStatement.executeUpdate();
+
+                    try (ResultSet generatedKeys =
+                                 productStatement.getGeneratedKeys()) {
+
+                        if (!generatedKeys.next()) {
+                            throw new SQLException(
+                                    "Failed to retrieve generated product ID."
+                            );
+                        }
+
+                        productId = generatedKeys.getLong(1);
+                    }
+                }
+
+                try (PreparedStatement inventoryStatement =
+                             connection.prepareStatement(inventorySql)) {
+
+                    inventoryStatement.setLong(1, productId);
+                    inventoryStatement.setInt(2, product.getStock());
+
+                    inventoryStatement.executeUpdate();
+                }
+
+                connection.commit();
+
+                product.setId(productId);
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+        }
+    }
+
     private Product mapProduct(ResultSet resultSet) throws SQLException {
 
         Product product = new Product();
