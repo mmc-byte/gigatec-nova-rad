@@ -162,6 +162,63 @@ public class ProductDAO {
         }
     }
 
+    public void update(Product product) throws SQLException {
+
+        String productSql = """
+            UPDATE products
+            SET
+                category_id = ?,
+                brand_id = ?,
+                name = ?,
+                description = ?,
+                sku = ?,
+                price = ?
+            WHERE id = ?
+            """;
+
+        String inventorySql = """
+            UPDATE inventory
+            SET quantity = ?
+            WHERE product_id = ?
+            """;
+
+        try (Connection connection = DatabaseConfig.getConnection()) {
+
+            try {
+                connection.setAutoCommit(false);
+
+                try (PreparedStatement productStatement =
+                             connection.prepareStatement(productSql)) {
+
+                    productStatement.setLong(1, product.getCategoryId());
+                    productStatement.setLong(2, product.getBrandId());
+                    productStatement.setString(3, product.getName());
+                    productStatement.setString(4, product.getDescription());
+                    productStatement.setString(5, product.getSku());
+                    productStatement.setBigDecimal(6, product.getPrice());
+                    productStatement.setLong(7, product.getId());
+
+                    productStatement.executeUpdate();
+                }
+
+                try (PreparedStatement inventoryStatement =
+                             connection.prepareStatement(inventorySql)) {
+
+                    inventoryStatement.setInt(1, product.getStock());
+                    inventoryStatement.setLong(2, product.getId());
+
+                    inventoryStatement.executeUpdate();
+                }
+
+                connection.commit();
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+        }
+    }
+
     private Product mapProduct(ResultSet resultSet) throws SQLException {
 
         Product product = new Product();

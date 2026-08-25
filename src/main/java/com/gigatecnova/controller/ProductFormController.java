@@ -6,21 +6,23 @@ import com.gigatecnova.model.Product;
 import com.gigatecnova.service.BrandService;
 import com.gigatecnova.service.CategoryService;
 import com.gigatecnova.service.ProductService;
-
+import com.gigatecnova.controller.ProductController;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
 
 public class ProductFormController {
+    private ProductController productController;
+    private Product product;
+    @FXML
+    private Label titleLabel;
 
     @FXML
     private TextField nameField;
@@ -139,7 +141,9 @@ public class ProductFormController {
     private void handleSave() {
 
         try {
-            Product product = new Product();
+            if (product == null) {
+                product = new Product();
+            }
 
             product.setName(nameField.getText());
             product.setSku(skuField.getText());
@@ -164,7 +168,12 @@ public class ProductFormController {
                     Integer.parseInt(stockField.getText())
             );
 
-            productService.createProduct(product);
+            if (product.getId() == null) {
+                productService.createProduct(product);
+            } else {
+                productService.updateProduct(product);
+            }
+
             if (productController != null) {
                 productController.refreshProducts();
             }
@@ -180,16 +189,43 @@ public class ProductFormController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    } /*termina Handle Save*/
 
     private void closeWindow() {
         Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
     }
 
-    private ProductController productController;
+
     public void setProductController(ProductController productController) {
         this.productController = productController;
+    }
+    public void setProduct(Product product) {
+
+        this.product = product;
+
+        titleLabel.setText("Editar producto");
+
+        nameField.setText(product.getName());
+        skuField.setText(product.getSku());
+        descriptionField.setText(product.getDescription());
+
+        priceField.setText(product.getPrice().toString());
+        stockField.setText(product.getStock().toString());
+
+        brandComboBox.getSelectionModel().select(
+                brandComboBox.getItems().stream()
+                        .filter(brand -> brand.getId().equals(product.getBrandId()))
+                        .findFirst()
+                        .orElse(null)
+        );
+
+        categoryComboBox.getSelectionModel().select(
+                categoryComboBox.getItems().stream()
+                        .filter(category -> category.getId().equals(product.getCategoryId()))
+                        .findFirst()
+                        .orElse(null)
+        );
     }
 
 }

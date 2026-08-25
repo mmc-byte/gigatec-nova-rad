@@ -9,6 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.layout.HBox;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -45,6 +50,12 @@ public class ProductController {
     @FXML
     private TableColumn<Product, Integer> stockColumn;
 
+    @FXML
+    private TableColumn<Product, Void> actionsColumn;
+
+    /*fin de las columnas */
+
+
     /* Botón de nuevo producto----*/
     @FXML
     private void handleNewProduct() {
@@ -70,8 +81,43 @@ public class ProductController {
             e.printStackTrace();
         }
     }
-    /*--------*/
 
+    /*Botón de editar producto ----- */
+    @FXML
+    private void handleEditProduct(Product product) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/gigatecnova/view/product-form.fxml"
+                    )
+            );
+
+            Parent root = loader.load();
+
+            ProductFormController formController = loader.getController();
+
+            formController.setProductController(this);
+            formController.setProduct(product);
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar producto");
+            stage.setScene(new Scene(root, 500, 550));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*Botón de borrar producto : este es codigo temporal*/
+    @FXML
+    private void handleDeleteProduct(Product product) {
+        System.out.println("Delete: " + product.getName());
+    }
+
+    /*----*/
 
     private final ProductService productService = new ProductService();
 
@@ -109,6 +155,39 @@ public class ProductController {
         stockColumn.setCellValueFactory(
                 new PropertyValueFactory<>("stock")
         );
+
+        actionsColumn.setCellFactory(column -> new TableCell<>() {
+
+            private final Button editButton = new Button("✏");
+            private final Button deleteButton = new Button("🗑");
+            private final HBox container = new HBox(5, editButton, deleteButton);
+
+            {
+                editButton.setOnAction(event -> {
+                    Product product = getTableView()
+                            .getItems()
+                            .get(getIndex());
+
+                    handleEditProduct(product);
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Product product = getTableView()
+                            .getItems()
+                            .get(getIndex());
+
+                    handleDeleteProduct(product);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                setGraphic(empty ? null : container);
+            }
+        });
+
     }
 
     private void loadProducts() {

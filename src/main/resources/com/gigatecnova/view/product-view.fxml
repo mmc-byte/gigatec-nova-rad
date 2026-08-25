@@ -53,6 +53,11 @@
                          text="Stock"
                          prefWidth="80"/>
 
+            <TableColumn fx:id="actionsColumn"
+                         text="Acciones"
+                         prefWidth="100"
+                         sortable="false"/>
+
         </columns>
 
     </TableView>

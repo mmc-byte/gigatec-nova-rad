@@ -27,6 +27,19 @@ public class ProductService {
         validateProduct(product);
         productDAO.create(product);
     }
+
+    /*UPDATE!!!*/
+    public void updateProduct(Product product) throws SQLException {
+        validateProduct(product);
+
+        if (product.getId() == null) {
+            throw new IllegalArgumentException("Product ID is required.");
+        }
+
+        productDAO.update(product);
+    }
+
+    /*Validaciones*/
     private void validateProduct(Product product) {
 
         if (product.getName() == null || product.getName().isBlank()) {
