@@ -1,7 +1,7 @@
 # Gigatec Nova: Sistema de Gestión de Productos
 Aplicación de escritorio desarrollada en Java y JavaFX para la gestión de productos de una tienda de tecnología, conectada a MySQL mediante JDBC.
 ## Descripción
-Esta es una aplicación de escritorio para la gestión del catálogo de productos de una tienda de tecnología. Permite consultar, registrar, modificar y desactivar productos mediante una interfaz gráfica conectada directamente a una base de datos MySQL. El proyecto se desarrolla de manera incremental dándole peso a la entrega temprana de funcionalidades utilizables.  Presenta un negocio ficticio, pero modelado con base en *negocios reales* del rubro. Gigatec Nova es un e-commerce que vende productos tecnológicos y está conformado por una sola tienda.
+Esta es una aplicación de escritorio para la gestión del catálogo de productos de una tienda de tecnología. Permite consultar, registrar, modificar y desactivar productos mediante una interfaz gráfica conectada directamente a una base de datos MySQL. El proyecto se desarrolla de manera incremental dándole peso a la entrega temprana de funcionalidades utilizables.  Presenta un negocio ficticio, pero modelado con base en *negocios reales* del rubro. Gigatec Nova es un e-commerce que vende productos tecnológicos.
 ## Stack
 * Java 25: Elegido por ser el más reciente LTS.
 * Java FX: Para tener una interfaz atractiva para el usuario no técnico.
