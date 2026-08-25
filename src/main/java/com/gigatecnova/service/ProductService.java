@@ -38,6 +38,15 @@ public class ProductService {
 
         productDAO.update(product);
     }
+    /*DELETE!!!*/
+    public void deleteProduct(Long productId) throws SQLException {
+
+        if (productId == null) {
+            throw new IllegalArgumentException("Product ID is required.");
+        }
+
+        productDAO.softDelete(productId);
+    }
 
     /*Validaciones*/
     private void validateProduct(Product product) {

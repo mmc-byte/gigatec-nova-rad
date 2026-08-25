@@ -33,6 +33,7 @@ public class ProductDAO {
                 JOIN brands b ON p.brand_id = b.id
                 JOIN categories c ON p.category_id = c.id
                 JOIN inventory i ON p.id = i.product_id
+                WHERE p.active = TRUE
                 ORDER BY p.id
                 """;
 
@@ -216,6 +217,22 @@ public class ProductDAO {
                 connection.rollback();
                 throw e;
             }
+        }
+    }
+
+    public void softDelete(Long productId) throws SQLException {
+
+        String sql = """
+            UPDATE products
+            SET active = FALSE
+            WHERE id = ?
+            """;
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, productId);
+            statement.executeUpdate();
         }
     }
 

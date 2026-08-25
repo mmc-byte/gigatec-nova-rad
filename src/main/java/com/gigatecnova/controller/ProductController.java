@@ -17,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
@@ -113,7 +115,42 @@ public class ProductController {
     /*Botón de borrar producto : este es codigo temporal*/
     @FXML
     private void handleDeleteProduct(Product product) {
-        System.out.println("Delete: " + product.getName());
+
+        Alert confirmation = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "¿Seguro que deseas eliminar el producto \""
+                        + product.getName()
+                        + "\"?",
+                ButtonType.CANCEL,
+                ButtonType.OK
+        );
+
+        confirmation.setTitle("Eliminar producto");
+        confirmation.setHeaderText("Confirmar eliminación");
+
+        confirmation.showAndWait().ifPresent(response -> {
+
+            if (response == ButtonType.OK) {
+
+                try {
+                    productService.deleteProduct(product.getId());
+
+                    refreshProducts();
+
+                    showSuccessMessage(
+                            "Producto eliminado correctamente."
+                    );
+
+                } catch (SQLException e) {
+
+                    showErrorMessage(
+                            "No se pudo eliminar el producto."
+                    );
+
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /*----*/
@@ -227,4 +264,22 @@ public class ProductController {
     public void refreshProducts() {
         loadProducts();
     }
+
+    /*metodos auxiliares para las alertas de eliminar*/
+    private void showSuccessMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Operación completada");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /*-- fin de la clase-----------*/
 }

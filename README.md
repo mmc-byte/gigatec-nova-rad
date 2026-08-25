@@ -57,6 +57,7 @@ Las iteraciones se ajustarían durante el desarrollo según problemas encontrado
 
 ### Próximas mejoras
 - [ ] Búsqueda
+- [ ] Refactorización
 - [ ] Procedimientos almacenados e índices
 - [ ] Gestión de inventario
 - [ ] Gestión de marcas y categorías
