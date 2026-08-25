@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 
+<?import javafx.scene.control.Spinner?>
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.gigatecnova.controller.ProductFormController"
@@ -88,15 +89,14 @@
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="5"/>
 
-
         <Label text="Stock:"
                GridPane.columnIndex="0"
                GridPane.rowIndex="6"/>
 
-        <TextField fx:id="stockField"
-                   promptText="0"
-                   GridPane.columnIndex="1"
-                   GridPane.rowIndex="6"/>
+        <Spinner fx:id="stockSpinner"
+                 prefWidth="250"
+                 GridPane.columnIndex="1"
+                 GridPane.rowIndex="6"/>
 
     </GridPane>
 

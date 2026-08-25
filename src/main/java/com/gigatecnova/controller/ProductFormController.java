@@ -13,6 +13,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -43,7 +46,7 @@ public class ProductFormController {
     private TextField priceField;
 
     @FXML
-    private TextField stockField;
+    private Spinner<Integer> stockSpinner;
 
     private final ProductService productService = new ProductService();
     private final BrandService brandService = new BrandService();
@@ -56,12 +59,59 @@ public class ProductFormController {
 
         loadBrands();
         loadCategories();
+
+        configurePriceField();
+
+        /*configuración del spinner de stock*/
+        SpinnerValueFactory.IntegerSpinnerValueFactory stockFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                        0,
+                        999999,
+                        0
+                );
+
+        stockFactory.setConverter(new StringConverter<>() {
+
+            @Override
+            public String toString(Integer value) {
+                return value == null ? "" : value.toString();
+            }
+
+            @Override
+            public Integer fromString(String value) {
+
+                try {
+                    int stock = Integer.parseInt(value);
+
+                    if (stock < 0 || stock > 999999) {
+                        throw new NumberFormatException();
+                    }
+
+                    return stock;
+
+                } catch (NumberFormatException e) {
+                    showErrorMessage(
+                            "El stock debe ser un número entero entre 0 y 999999."
+                    );
+
+                    return stockSpinner.getValue();
+                }
+            }
+        });
+
+        stockSpinner.setValueFactory(stockFactory);
+        stockSpinner.setEditable(true);
+        /*fin de la config del spinner*/
     }
-    private void showSuccessMessage() {
+    private void showSuccessMessage(boolean isUpdate) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Producto creado");
+        alert.setTitle(isUpdate ? "Producto actualizado" : "Producto creado");
         alert.setHeaderText(null);
-        alert.setContentText("¡Producto agregado correctamente! :)");
+        alert.setContentText(
+                isUpdate
+                        ? "¡Producto actualizado correctamente! :)"
+                        : "¡Producto agregado correctamente! :)"
+        );
         alert.showAndWait();
     }
 
@@ -141,7 +191,9 @@ public class ProductFormController {
     private void handleSave() {
 
         try {
-            if (product == null) {
+            boolean isUpdate = product != null;
+
+            if (!isUpdate) {
                 product = new Product();
             }
 
@@ -164,29 +216,29 @@ public class ProductFormController {
                     new BigDecimal(priceField.getText())
             );
 
-            product.setStock(
-                    Integer.parseInt(stockField.getText())
-            );
+            product.setStock(stockSpinner.getValue());
 
-            if (product.getId() == null) {
-                productService.createProduct(product);
-            } else {
+            if (isUpdate) {
                 productService.updateProduct(product);
+            } else {
+                productService.createProduct(product);
             }
 
             if (productController != null) {
                 productController.refreshProducts();
             }
-            showSuccessMessage();
+
+            showSuccessMessage(isUpdate);
             closeWindow();
 
         } catch (NumberFormatException e) {
-            System.err.println("Price and stock must contain valid numbers.");
+            showErrorMessage("El precio debe contener un número válido.");
 
         } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            showErrorMessage(e.getMessage());
 
         } catch (SQLException e) {
+            showErrorMessage("No se pudo guardar el producto.");
             e.printStackTrace();
         }
     } /*termina Handle Save*/
@@ -211,7 +263,7 @@ public class ProductFormController {
         descriptionField.setText(product.getDescription());
 
         priceField.setText(product.getPrice().toString());
-        stockField.setText(product.getStock().toString());
+        stockSpinner.getValueFactory().setValue(product.getStock());
 
         brandComboBox.getSelectionModel().select(
                 brandComboBox.getItems().stream()
@@ -226,6 +278,26 @@ public class ProductFormController {
                         .findFirst()
                         .orElse(null)
         );
+    }
+
+    /*para que el campo de precio esté restringido a números decimales*/
+    private void configurePriceField() {
+        priceField.textProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue.matches("\\d*(\\.\\d{0,2})?")) {
+                return;
+            }
+
+            priceField.setText(oldValue);
+        });
+    }
+    /*---*/
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

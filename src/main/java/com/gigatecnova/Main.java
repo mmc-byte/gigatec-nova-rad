@@ -16,7 +16,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(loader.load(), 1200, 650);
         stage.setMinWidth(900);
-        stage.setMinHeight(900);
+        stage.setMinHeight(1000);
         stage.setTitle("Gigatec Nova");
         stage.setScene(scene);
         stage.show();

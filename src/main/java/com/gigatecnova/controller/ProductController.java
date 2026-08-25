@@ -7,11 +7,7 @@ import com.gigatecnova.controller.ProductFormController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,7 +16,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 import java.sql.SQLException;
 
@@ -158,11 +157,31 @@ public class ProductController {
 
         actionsColumn.setCellFactory(column -> new TableCell<>() {
 
-            private final Button editButton = new Button("✏");
-            private final Button deleteButton = new Button("🗑");
+            private final Button editButton = new Button();
+            private final Button deleteButton = new Button();
             private final HBox container = new HBox(5, editButton, deleteButton);
 
             {
+                FontIcon editIcon = new FontIcon(FontAwesomeSolid.EDIT);
+                FontIcon deleteIcon = new FontIcon(FontAwesomeSolid.TRASH);
+
+                editIcon.setIconSize(14);
+                deleteIcon.setIconSize(14);
+
+                editIcon.setIconColor(Color.web("#E69A00"));
+                deleteIcon.setIconColor(Color.web("#FF055B"));
+
+                editButton.setGraphic(editIcon);
+                deleteButton.setGraphic(deleteIcon);
+
+                editButton.setTooltip(
+                        new Tooltip("Editar producto")
+                );
+
+                deleteButton.setTooltip(
+                        new Tooltip("Eliminar producto")
+                );
+
                 editButton.setOnAction(event -> {
                     Product product = getTableView()
                             .getItems()
