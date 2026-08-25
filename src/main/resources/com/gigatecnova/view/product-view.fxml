@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gigatecnova.controller.ProductController"
+      spacing="15"
+      style="-fx-padding: 25; -fx-background-color: #FFF7F5;">
+
+    <Label text="Nuestros Productos"
+           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #C94F3D;"/>
+
+    <TableView fx:id="productTable"
+               VBox.vgrow="ALWAYS"
+               style="-fx-font-size: 13px;">
+
+        <columns>
+
+            <TableColumn fx:id="skuColumn"
+                         text="SKU"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="nameColumn"
+                         text="Nombre"
+                         prefWidth="200"/>
+
+            <TableColumn fx:id="brandColumn"
+                         text="Marca"
+                         prefWidth="130"/>
+
+            <TableColumn fx:id="categoryColumn"
+                         text="Categoría"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="descriptionColumn"
+                         text="Descripción"
+                         prefWidth="250"/>
+
+            <TableColumn fx:id="priceColumn"
+                         text="Precio"
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="stockColumn"
+                         text="Stock"
+                         prefWidth="80"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>
