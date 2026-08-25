@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ProductDAO {
 
+    /*CRUD*/
     public List<Product> findAll() throws SQLException {
 
         String sql = """
@@ -236,6 +237,56 @@ public class ProductDAO {
         }
     }
 
+    /*barra de busqueda*/
+    public List<Product> search(String searchTerm) throws SQLException {
+
+        String sql = """
+            SELECT
+                p.id,
+                p.category_id,
+                p.brand_id,
+                p.name,
+                p.description,
+                p.sku,
+                p.price,
+                p.active,
+                p.created_at,
+                p.updated_at,
+                b.name AS brand_name,
+                c.name AS category_name,
+                i.quantity AS stock
+            FROM products p
+            JOIN brands b ON p.brand_id = b.id
+            JOIN categories c ON p.category_id = c.id
+            JOIN inventory i ON p.id = i.product_id
+            WHERE p.active = TRUE
+              AND (
+                    p.name LIKE ?
+                    OR p.sku LIKE ?
+                  )
+            ORDER BY p.id
+            """;
+
+        List<Product> products = new ArrayList<>();
+
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            String pattern = "%" + searchTerm + "%";
+
+            statement.setString(1, pattern);
+            statement.setString(2, pattern);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    products.add(mapProduct(resultSet));
+                }
+            }
+        }
+
+        return products;
+    }
     private Product mapProduct(ResultSet resultSet) throws SQLException {
 
         Product product = new Product();

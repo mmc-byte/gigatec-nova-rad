@@ -47,6 +47,14 @@ public class ProductService {
 
         productDAO.softDelete(productId);
     }
+    /*Barra de búsqueda!*/
+    public List<Product> searchProducts(String searchTerm) throws SQLException {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return productDAO.findAll();
+        }
+        return productDAO.search(searchTerm.trim());
+    }
+
 
     /*Validaciones*/
     private void validateProduct(Product product) {

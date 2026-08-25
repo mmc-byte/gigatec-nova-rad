@@ -17,7 +17,8 @@ Arquitectura por capas con separación de responsabilidades, inspirada en MVC.
 A diferencia de MVC clásico, agrega una capa Service y una DAO. Le di prioridad a que sea sencillo pero que facilite el mantenimiento y permita cambios en iteraciones rápidas.
 
 ## Enfoque Rapid Application Development (RAD): Iteraciones
-Actualmente, el proyecto se encuentra en la iteración 1.
+**Actualmente, el proyecto se encuentra en la iteración 2.** Con un avance de la iteración 3.
+
 ### Base técnica
 No una iteración, previo a ello.
 * Configuración del entorno (JDK, Maven, contenedor de Docker).

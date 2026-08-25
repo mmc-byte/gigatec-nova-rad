@@ -6,6 +6,10 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+
+
 <VBox xmlns="http://javafx.com/javafx/25"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.gigatecnova.controller.ProductController"
@@ -18,6 +22,17 @@
     <Button text="Nuevo producto"
             onAction="#handleNewProduct"
             prefWidth="140"/>
+
+    <HBox spacing="10">
+
+        <Label text="Buscar:"
+               style="-fx-font-weight: bold;"/>
+
+        <TextField fx:id="searchField"
+                   promptText="Nombre o SKU..."
+                   prefWidth="300"/>
+
+    </HBox>
 
     <TableView fx:id="productTable"
                VBox.vgrow="ALWAYS"

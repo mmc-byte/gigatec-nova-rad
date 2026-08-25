@@ -19,11 +19,13 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class ProductController {
 
@@ -153,14 +155,39 @@ public class ProductController {
         });
     }
 
+    /*Barra de busqueda*/
+    @FXML
+    private TextField searchField;
+
     /*----*/
 
+    /*Hanlde*/
+    private void handleSearch(String searchTerm) {
+
+        try {
+            List<Product> products =
+                    productService.searchProducts(searchTerm);
+
+            productTable.setItems(
+                    FXCollections.observableArrayList(products)
+            );
+
+        } catch (SQLException e) {
+            showErrorMessage("No se pudieron buscar los productos.");
+            e.printStackTrace();
+        }
+    }
     private final ProductService productService = new ProductService();
 
     @FXML
     public void initialize() {
         configureColumns();
         loadProducts();
+
+        searchField.textProperty().addListener(
+                (observable, oldValue, newValue) -> handleSearch(newValue)
+        );
+
     }
 
     private void configureColumns() {
